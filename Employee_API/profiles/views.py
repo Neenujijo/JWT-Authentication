@@ -3,9 +3,11 @@ from rest_framework import generics,status
 from rest_framework.response import Response
 from . import serializers
 from .models import Profile
-from rest_framework.permissions import IsAuthenticated,IsAdminUser,IsAuthenticatedOrReadOnly
+from authentication.permissions import AdminOrReadOnly
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.exceptions import AuthenticationFailed
+
 User=get_user_model()
 
 # Create your views here.
@@ -19,7 +21,7 @@ User=get_user_model()
 class ProfileCreateView(generics.GenericAPIView):
     queryset =Profile.objects.all()
     serializer_class=serializers.ProfileCreationSerializer
-    permission_classes=[IsAuthenticatedOrReadOnly]
+    permission_classes=[AdminOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Get all Employee profiles")
     def get(self,request):
@@ -46,7 +48,7 @@ class ProfileCreateView(generics.GenericAPIView):
 
 class ProfileIdView(generics.GenericAPIView):
     serializer_class=serializers.ProfileCreationSerializer
-    permission_classes=[IsAdminUser]
+    permission_classes=[AdminOrReadOnly]
 
 
     @swagger_auto_schema(operation_summary="View the detail of profile by its ID")
@@ -84,30 +86,23 @@ class ProfileIdView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# class UserProfileView(generics.GenericAPIView):
-#     # queryset =Profile.objects.all()
-#     serializer_class=serializers.ProfileCreationSerializer
-#     permission_classes=[IsAuthenticated,IsAdminUser]
-
-#     def get(self,request,user_id,profile_id):
-#         user=User.objects.get(pk=user_id)
-
-#         profile=Profile.objects.all().filter(employee=user).filter(pk=profile_id)
-
-#         serializer=self.serializer_class(instance=profile)
-#         return Response(data=serializer.data,status=status.HTTP_200_OK)
-
-# class UserProfileDetailView(generics.GenericAPIView):
-#     serializer_class=serializers.ProfileCreationSerializer
-#     permission_classes=[IsAuthenticated,IsAdminUser]
-
-#     def get(self,request,user_id,profile_id):
-#         user=User.objects.get(pk=user_id)
-
-#         profile=Profile.objects.all().filter(employee=user).filter(pk=profile_id)
 
 
-#         serializer=self.serializer_class(instance=profile)
+# class UserLoginView(generics.GenericAPIView):
 
-#         return Response(data=serializer.data,status=status.HTTP_200_OK)
+#     serializer_class=serializers.UserSerializer
+
+#     def post(self,request):
+#         phone_number=request.data.get('phone_number')
+#         password=request.data.get('password')
+
+#         user = User.objects.filter(phone_number=phone_number).first()
+
+#         if user is None:
+#             raise AuthenticationFailed('User not found!')
+
+#         if not user.check_password(password):
+#             raise AuthenticationFailed('Incorrect password!')
+
+        
 

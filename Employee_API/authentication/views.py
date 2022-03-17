@@ -9,9 +9,6 @@ from . import serializers
 
 # Create your views here.
 
-# class HelloAuthView(generics.GenericAPIView):
-#     def get(self,request):
-#         return Response(data={"message":"Hello Auth"},status=status.HTTP_200_OK)
 
 class UserView(generics.GenericAPIView):
     # queryset =User.objects.all()

@@ -1,5 +1,9 @@
 from rest_framework import serializers
 from .models import Profile
+from phonenumber_field.serializerfields import PhoneNumberField
+from django.contrib.auth import get_user_model
+
+User=get_user_model
 
 
 
@@ -18,4 +22,12 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
         'employee_designation','employee_department','gender',
         ]
 
+
+class UserSerializer(serializers.ModelSerializer):
+    password=serializers.CharField(min_length=8,write_only=True)
+
+
+    class Meta:
+        model=User
+        fields=['phone_number','password']
 
