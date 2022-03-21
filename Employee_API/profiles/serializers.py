@@ -23,11 +23,11 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
         ]
 
 
-class UserSerializer(serializers.ModelSerializer):
-    password=serializers.CharField(min_length=8,write_only=True)
+# class UserSerializer(serializers.ModelSerializer):
+#     password=serializers.CharField(min_length=8,write_only=True)
 
 
-    class Meta:
-        model=User
-        fields=['phone_number','password']
+#     class Meta:
+#         model=User
+#         fields=['phone_number','password']
 

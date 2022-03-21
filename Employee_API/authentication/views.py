@@ -11,7 +11,7 @@ from . import serializers
 
 
 class UserView(generics.GenericAPIView):
-    # queryset =User.objects.all()
+    queryset =User.objects.all()
     serializer_class=serializers.UserCreationSerializer
 
     @swagger_auto_schema(operation_summary="Get all Employee")

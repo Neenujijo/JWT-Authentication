@@ -6,4 +6,5 @@ from .models import Profile
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display=['first_name','employee_code','employee_designation']
+    list_filter=['employee_designation']
     

@@ -1,28 +1,31 @@
 from django.shortcuts import render,get_object_or_404
 from rest_framework import generics,status
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from . import serializers
 from .models import Profile
-from authentication.permissions import AdminOrReadOnly
+from authentication.permissions import AdminOrReadOnly,UserOrReadOnly
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
+
 
 User=get_user_model()
 
 # Create your views here.
 
-# class HelloProfileView(generics.GenericAPIView):
-#     def get(self,request):
-#         return Response(data={"message":"Hello employee"},status=status.HTTP_200_OK)
-
+class UserDesignationView(generics.ListAPIView):
+    serializer_class=serializers.ProfileCreationSerializer
+    queryset = Profile.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['employee_designation',]
 
 
 class ProfileCreateView(generics.GenericAPIView):
     queryset =Profile.objects.all()
     serializer_class=serializers.ProfileCreationSerializer
-    permission_classes=[AdminOrReadOnly]
-
+    # permission_classes=[]
     @swagger_auto_schema(operation_summary="Get all Employee profiles")
     def get(self,request):
 
@@ -48,7 +51,7 @@ class ProfileCreateView(generics.GenericAPIView):
 
 class ProfileIdView(generics.GenericAPIView):
     serializer_class=serializers.ProfileCreationSerializer
-    permission_classes=[AdminOrReadOnly]
+    permission_classes=[UserOrReadOnly]
 
 
     @swagger_auto_schema(operation_summary="View the detail of profile by its ID")
@@ -87,22 +90,4 @@ class ProfileIdView(generics.GenericAPIView):
 
 
 
-
-# class UserLoginView(generics.GenericAPIView):
-
-#     serializer_class=serializers.UserSerializer
-
-#     def post(self,request):
-#         phone_number=request.data.get('phone_number')
-#         password=request.data.get('password')
-
-#         user = User.objects.filter(phone_number=phone_number).first()
-
-#         if user is None:
-#             raise AuthenticationFailed('User not found!')
-
-#         if not user.check_password(password):
-#             raise AuthenticationFailed('Incorrect password!')
-
-        
 
