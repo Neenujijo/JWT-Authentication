@@ -1,6 +1,9 @@
 from rest_framework import permissions
+from django.contrib.auth import get_user_model
 
-class AdminOrReadOnly(permissions.IsAdminUser):
+User=get_user_model
+
+class IsAdminOrReadOnly(permissions.IsAdminUser):
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -8,10 +11,10 @@ class AdminOrReadOnly(permissions.IsAdminUser):
         else:
             return bool(request.user and request.user.is_staff)
 
-class UserOrReadOnly(permissions.BasePermission):
+class IsUserOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
         else:
 
-            return obj.employee==request.user
+            return obj.employee==request.user or request.user.is_staff

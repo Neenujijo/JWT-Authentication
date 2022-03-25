@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from . import serializers
 from .models import Profile
-from authentication.permissions import AdminOrReadOnly,UserOrReadOnly
+from authentication.permissions import IsAdminOrReadOnly,IsUserOrReadOnly
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import AuthenticationFailed
@@ -25,7 +25,7 @@ class UserDesignationView(generics.ListAPIView):
 class ProfileCreateView(generics.GenericAPIView):
     queryset =Profile.objects.all()
     serializer_class=serializers.ProfileCreationSerializer
-    # permission_classes=[]
+    permission_classes=[IsAdminOrReadOnly]
     @swagger_auto_schema(operation_summary="Get all Employee profiles")
     def get(self,request):
 
@@ -51,7 +51,7 @@ class ProfileCreateView(generics.GenericAPIView):
 
 class ProfileIdView(generics.GenericAPIView):
     serializer_class=serializers.ProfileCreationSerializer
-    permission_classes=[UserOrReadOnly]
+    permission_classes=[IsAuthenticated]
 
 
     @swagger_auto_schema(operation_summary="View the detail of profile by its ID")

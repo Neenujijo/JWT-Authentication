@@ -46,31 +46,32 @@ INSTALLED_APPS = [
     #third_party
     'rest_framework',
     'rest_framework.authtoken',
-    'djoser',
+    # 'djoser',
     'drf_yasg',
     'django_filters',
+    # 'rest_framework_simplejwt',
 
 ]
-
 AUTH_USER_MODEL ='authentication.User'
 
 
 REST_FRAMEWORK ={
     'NON_FIELD_ERRORS_KEY':'errors',
+    'DEFAULT_PERMISSION_CLASSES': ( 'rest_framework.permissions.IsAuthenticatedOrReadOnly', ),
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('Bearer',),
-   'ACCESS_TOKEN_LIFETIME':timedelta(days=1),
-   'REFRESH_TOKEN_LIFETIME':timedelta(days=1),
-   'BLACKLIST_AFTER_ROTATION': False,
+# SIMPLE_JWT = {
+#    'AUTH_HEADER_TYPES': ('Bearer',),
+#    'ACCESS_TOKEN_LIFETIME':timedelta(days=1),
+#    'REFRESH_TOKEN_LIFETIME':timedelta(days=1),
+#    'BLACKLIST_AFTER_ROTATION': False,
 
-}
+# }
 
 SWAGGER_SETTINGS={
     'SECURITY_DEFINITIONS':{
